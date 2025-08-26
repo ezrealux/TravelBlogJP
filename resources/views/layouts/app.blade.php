@@ -7,6 +7,46 @@
     <title>{{ config('app.name', 'Blog') }}</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <script>
+      // 從localStorage讀取theme('dark'/'light') 並設定到html底下
+      document.addEventListener('DOMContentLoaded', function() {
+          const root = document.documentElement;
+
+          // 初始化：從 localStorage 或系統偏好讀取
+          let theme = localStorage.getItem('theme')
+              || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+          root.setAttribute('data-bs-theme', theme);
+
+          const toggleBtn = document.getElementById('themeToggle');
+          const icon = document.getElementById('themeIcon');
+
+          function updateIcon(theme) {
+              if (theme === 'dark') {
+                  icon.className = "bi bi-sun-fill"; // 深色模式 → 顯示太陽
+              } else {
+                  icon.className = "bi bi-moon-fill"; // 淺色模式 → 顯示月亮
+              }
+          }
+
+          function setTheme(newTheme) {
+              root.setAttribute('data-bs-theme', newTheme);
+              localStorage.setItem('theme', newTheme);
+              updateIcon(newTheme);
+          }
+
+          // 初始化 icon
+          updateIcon(theme);
+
+          // 點擊切換
+          if (toggleBtn) {
+              toggleBtn.addEventListener('click', function() {
+                  let currentTheme = root.getAttribute('data-bs-theme');
+                  let newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                  setTheme(newTheme);
+              });
+          }
+      });
+    </script>
   </head>
 
   <body>
@@ -37,7 +77,7 @@
             @auth
             <!--asset(...): Laravel 的 helper，會把路徑補上網站的 base URL，例如：
                 asset('images/default-avatar.png') -> https://yourdomain.com/images/default-avatar.png-->
-              <li class="nav-item dropdown">
+              <li class="nav-item dropdown ">
               <!--dropdown: bootstrap觸發下拉功能-->
                   {{-- 頭像按鈕 --}}
                   <a id="navbarAvatar"
@@ -78,6 +118,13 @@
                         @csrf
                         <button type="submit" class="dropdown-item text-danger">登出</button>
                     </form>
+
+                    <li class="nav-item d-flex align-items-center">
+                      <button id="themeToggle" class="btn btn-link nav-link">
+                        {{-- 預設 icon (淺色模式：月亮、深色模式：太陽) --}}
+                        <i id="themeIcon" class="bi"></i>
+                      </button>
+                    </li>
                 </div>
               </li>
             @else
