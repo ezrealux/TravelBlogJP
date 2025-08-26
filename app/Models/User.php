@@ -6,6 +6,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Str;
 
 class User extends Authenticatable
 {
@@ -50,5 +51,25 @@ class User extends Authenticatable
     public function articles()
     {
         return $this->hasMany(\App\Models\Article::class);
+    }
+
+    public function getRouteKeyName()
+    {
+        return 'slug';
+    }
+
+    protected static function booted()
+    {
+        static::creating(function ($user) {
+            if (empty($user->slug)) {
+                $user->slug = Str::slug($user->name) . '-' . uniqid();
+            }
+        });
+
+        static::updating(function ($user) {
+            if ($user->isDirty('name')) {
+                $user->slug = Str::slug($user->name) . '-' . uniqid();
+            }
+        });
     }
 }

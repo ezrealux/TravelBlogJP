@@ -69,8 +69,8 @@
         
         <div id="navbarsExample" class="collapse navbar-collapse">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            <li class="nav-item"><a class="nav-link" href="{{ route('articles.index') }}">文章</a></li>
-            <li class="nav-item"><a class="nav-link" href="{{ route('categories.index') }}">分類</a></li>
+            <li class="nav-item"><a class="nav-link" href="{{ route('articles.index') }}">最新文章</a></li>
+            <li class="nav-item"><a class="nav-link" href="{{ route('categories.index') }}">地區分類</a></li>
           </ul>
           
           <ul class="navbar-nav ms-auto">
@@ -110,8 +110,7 @@
                     </div>
 
                     {{-- 功能選單 --}}
-                    <a class="dropdown-item" href="{{ url('/home') }}">主頁</a>
-                    {{--<a class="dropdown-item" href="{{ route('profile.show') }}">帳戶設定</a>--}}
+                    <a class="nav-link" href="{{ route('users.show', Auth::user()->slug) }}">主頁</a>
 
                     <div class="dropdown-divider"></div>
                     <form action="{{ route('logout') }}" method="POST">

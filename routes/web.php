@@ -1,11 +1,12 @@
 <?php
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\HomeController;
 
 Route::get('/', fn () => redirect()->route('articles.index'));
-Route::get('/home', [HomeController::class, 'index'])->middleware('auth')->name('home');
+Route::get('/home', [HomeController::class, 'index'])->name('home');
 
 // Route resource會註冊7個RestFul常見route
 /*
@@ -19,6 +20,9 @@ PUT/PATCH	/articles/{article}         articles.update	    update()	更新文章�
 DELETE	    /articles/{article}         articles.destroy	destroy()	刪除文章
 */
 // Laravel 從上到下比對routes，如把 articles/{article} 放在上面，articles/create 就會被當作是 articles/{article}
+
+Route::get('/users/{user:slug}', [UserController::class, 'show'])->name('users.show');
+
 Route::middleware(['auth', 'verified'])->group(function () {    
     Route::resource('articles', ArticleController::class)->except(['index', 'show']);
 });
