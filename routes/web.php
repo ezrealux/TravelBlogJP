@@ -1,6 +1,7 @@
 <?php
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ArticleController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\HomeController;
 
 Route::get('/', fn () => redirect()->route('articles.index'));
@@ -22,7 +23,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('articles', ArticleController::class)->except(['index', 'show']);
 });
 Route::resource('articles', ArticleController::class)->only(['index', 'show']);
-
 Route::get('/articles', [ArticleController::class, 'index'])->name('articles.index');
+
+Route::get('/categories', [CategoryController::class, 'index'])->name('categories.index');
+//Route::get('/categories/{category}', [CategoryController::class, 'show'])->name('categories.show');
 Route::get('/categories/{category}', [ArticleController::class, 'byCategory'])->name('articles.byCategory');
+
 Route::get('/tags/{tag}', [ArticleController::class, 'byTag'])->name('articles.byTag');
+//Route::get('/tags/{tag}', [CategoryController::class, 'show'])->name('tags.show');
+
+//Route::get('/search', [SearchController::class, 'index'])->name('search');

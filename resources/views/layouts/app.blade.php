@@ -30,20 +30,55 @@
         <div id="navbarsExample" class="collapse navbar-collapse">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item"><a class="nav-link" href="{{ route('articles.index') }}">文章</a></li>
+            <li class="nav-item"><a class="nav-link" href="{{ route('categories.index') }}">分類</a></li>
           </ul>
           
           <ul class="navbar-nav ms-auto">
             @auth
             <!--asset(...): Laravel 的 helper，會把路徑補上網站的 base URL，例如：
                 asset('images/default-avatar.png') -> https://yourdomain.com/images/default-avatar.png-->
-              <img src="{{ asset(auth()->user()->avatar ?? 'images/default-avatar.png') }}" 
-                class="rounded-circle me-2" width="32" height="32" alt="avatar">
-              <li class="nav-item me-2"><span class="navbar-text">{{ auth()->user()->name }}</span></li>
-              <li class="nav-item">
-                <form method="POST" action="{{ route('logout') }}">
-                  @csrf
-                  <button class="btn btn-outline-light btn-sm">登出</button>
-                </form>
+              <li class="nav-item dropdown">
+              <!--dropdown: bootstrap觸發下拉功能-->
+                  {{-- 頭像按鈕 --}}
+                  <a id="navbarAvatar"
+                    class="nav-link dropdown-toggle d-flex align-items-center"
+                    href="#" role="button"
+                    data-bs-toggle="dropdown"
+                    aria-haspopup="true" aria-expanded="false">
+                      <img src="{{ asset(Auth::user()->avatar ?? 'storage/avatars/default-avatar.png') }}"
+                          alt="avatar"
+                          class="rounded-circle"
+                          style="width:32px; height:32px; object-fit:cover;">
+                  </a>
+                  <!--aria-haspopup="true"	表示是個「彈出式選單」螢幕閱讀器會告知使用者(小箭頭)
+                      aria-expanded="false" 目前是閉合狀態-->
+
+                {{-- Dropdown Menu --}}
+                <!--dropdown-menu-lg-start -->
+                <div class="dropdown-menu dropdown-menu-end shadow" 
+                    aria-labelledby="navbarAvatar"
+                    style="min-width: 220px;">
+
+                    {{-- 使用者資訊 --}}
+                    <div class="px-3 py-2 text-center border-bottom">
+                        <img src="{{ asset(Auth::user()->avatar ?? 'storage/avatars/default-avatar.png') }}"
+                            alt="avatar"
+                            class="rounded-circle mb-2"
+                            style="width:60px; height:60px; object-fit:cover;">
+                        <div class="fw-bold">{{ Auth::user()->name }}</div>
+                        <small class="text-muted">{{ Auth::user()->email }}</small>
+                    </div>
+
+                    {{-- 功能選單 --}}
+                    <a class="dropdown-item" href="{{ url('/home') }}">主頁</a>
+                    {{--<a class="dropdown-item" href="{{ route('profile.show') }}">帳戶設定</a>--}}
+
+                    <div class="dropdown-divider"></div>
+                    <form action="{{ route('logout') }}" method="POST">
+                        @csrf
+                        <button type="submit" class="dropdown-item text-danger">登出</button>
+                    </form>
+                </div>
               </li>
             @else
               <li class="nav-item"><a class="nav-link" href="{{ route('login') }}">登入</a></li>

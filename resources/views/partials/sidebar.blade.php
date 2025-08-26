@@ -3,12 +3,13 @@
     <div class="card-header">分類</div>
     <div class="list-group list-group-flush">
         @foreach($categories as $cat)
-            <a href="{{ route('articles.byCategory', $cat) }}"
-               class="list-group-item list-group-item-action
-               {{ isset($selectedCategory) && $selectedCategory->id === $cat->id ? 'active' : '' }}">
+            <a href="{{ $loop->first ? route('categories.index') : route('articles.byCategory', $cat) }}"
+            class="list-group-item list-group-item-action
+            {{ isset($selectedCategory) && $selectedCategory->id === $cat->id ? 'active' : '' }}">
                 {{ $cat->name }}
             </a>
         @endforeach
+
     </div>
 </div>
 

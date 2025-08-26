@@ -89,11 +89,11 @@ class ArticleController extends Controller
     {
         $this->authorize('update', $article);
         $validated = $request->validate([
-        'title' => 'required|string|max:255',
-        'body' => 'required|string',
-        'category_id' => 'exists:categories,id',
-        'tags' => 'array',
-        'tags.*' => 'exists:tags,id',
+            'title' => 'required|string|max:255',
+            'body' => 'required|string',
+            'category_id' => 'exists:categories,id',
+            'tags' => 'array',
+            'tags.*' => 'exists:tags,id',
         ]);
 
         $article->update([

@@ -54,6 +54,7 @@
                       <a class="dropdown-item" href="{{ route('articles.edit', $article) }}">編輯</a>
                     </li>
                   @endcan
+                  
                   @can('delete', $article)
                     <li>
                       <form action="{{ route('articles.destroy', $article) }}" method="POST"

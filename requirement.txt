@@ -2,9 +2,11 @@ composer create-project laravel/laravel [ProjectName]
 cd [ProjectName]
 composer require laravel/fortify
 php artisan vendor:publish --provider="Laravel\\Fortify\\FortifyServiceProvider"
+composer require laravel/scout
+php artisan vendor:publish --provider="Laravel\Scout\ScoutServiceProvider"
 
 Search bar: Scout
-Search engine: melisearch typesense
+Search engine: melisearch (until typesense is compatible with laravel12)
 Text editor: TinyMCE CKEditor
 Icon: https://icons.getbootstrap.com/ 
 

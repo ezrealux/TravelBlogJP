@@ -5,31 +5,32 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\View\View;
 
 class CategoryController extends Controller
 {
-    /**
-     * 顯示所有分類
-     */
-    public function index()
+    // 分類首頁：列出所有分類
+    public function index(): View
     {
-        $categories = Category::with('parent')->orderBy('name')->get();
-
+        $categories = Category::withCount('articles')->orderBy('id')->get();
         return view('categories.index', compact('categories'));
     }
-
-    /**
-     * 顯示建立分類表單
-     */
+    /*
+    // 分類文章頁：已經有 show
+    public function show(Category $category): View
+    {
+        $articles = $category->articles()->with('user', 'tags')->latest()->paginate(10);
+        return view('categories.show', compact('category', 'articles'));
+    }
+    */
+    // 顯示建立分類表單
     public function create()
     {
         $parentCategories = Category::orderBy('name')->get();
         return view('categories.create', compact('parentCategories'));
     }
 
-    /**
-     * 儲存新分類
-     */
+    // 儲存新分類
     public function store(Request $request)
     {
         $request->validate([
@@ -46,9 +47,7 @@ class CategoryController extends Controller
         return redirect()->route('categories.index')->with('success', '分類建立成功');
     }
 
-    /**
-     * 顯示編輯表單
-     */
+    //顯示編輯表單
     public function edit(Category $category)
     {
         $parentCategories = Category::where('id', '!=', $category->id)->orderBy('name')->get();
@@ -56,9 +55,7 @@ class CategoryController extends Controller
         return view('categories.edit', compact('category', 'parentCategories'));
     }
 
-    /**
-     * 更新分類資料
-     */
+    //更新分類資料
     public function update(Request $request, Category $category)
     {
         $request->validate([
@@ -75,9 +72,7 @@ class CategoryController extends Controller
         return redirect()->route('categories.index')->with('success', '分類更新成功');
     }
 
-    /**
-     * 刪除分類
-     */
+    // 刪除分類
     public function destroy(Category $category)
     {
         $category->delete();
