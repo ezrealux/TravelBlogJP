@@ -29,6 +29,7 @@ class CreateNewUser implements CreatesNewUsers
                 Rule::unique(User::class),
             ],
             'password' => $this->passwordRules(),
+            'email_verified_at' => now(),
         ])->validate();
 
         $avatarPath = 'app/public/avatars/default-avatar.png';
@@ -39,7 +40,6 @@ class CreateNewUser implements CreatesNewUsers
             $path = request()->file('avatar')->store('avatars', 'public');
             $avatarPath = 'storage/'.$path;
         }
-        //dd($input, request()->file('avatar'));
 
         return User::create([
             'name' => $input['name'],

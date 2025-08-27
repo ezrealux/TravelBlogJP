@@ -1,6 +1,7 @@
 <?php
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\HomeController;
@@ -21,8 +22,15 @@ DELETE	    /articles/{article}         articles.destroy	destroy()	刪除文章
 */
 // Laravel 從上到下比對routes，如把 articles/{article} 放在上面，articles/create 就會被當作是 articles/{article}
 
+//參數傳入user或者slug
 Route::get('/users/{user:slug}', [UserController::class, 'show'])->name('users.show');
 
+Route::middleware('auth')->group(function () {
+    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
+});
+
+// auth:必須已登入，verified:email必須已驗證
 Route::middleware(['auth', 'verified'])->group(function () {    
     Route::resource('articles', ArticleController::class)->except(['index', 'show']);
 });

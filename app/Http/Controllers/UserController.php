@@ -13,4 +13,10 @@ class UserController extends Controller
         $articles = $user->articles()->with('category','tags')->latest()->paginate(10);
         return view('users.show', compact('user', 'articles'));
     }
+
+    public function getRouteKeyName()
+    {
+        return 'slug';
+    }
+
 }

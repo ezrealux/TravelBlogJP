@@ -7,6 +7,8 @@
     <title>{{ config('app.name', 'Blog') }}</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <link  href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css" rel="stylesheet">
+    @stack('styles')
     <script>
       // 從localStorage讀取theme('dark'/'light') 並設定到html底下
       document.addEventListener('DOMContentLoaded', function() {
@@ -101,7 +103,7 @@
 
                     {{-- 使用者資訊 --}}
                     <div class="px-3 py-2 text-center border-bottom">
-                        <img src="{{ asset(Auth::user()->avatar ?? 'storage/avatars/default-avatar.png') }}"
+                        <img src="{{ asset(Auth::user()->avatar ?? 'storage/app/public/avatars/default-avatar.png') }}"
                             alt="avatar"
                             class="rounded-circle mb-2"
                             style="width:60px; height:60px; object-fit:cover;">
@@ -110,7 +112,7 @@
                     </div>
 
                     {{-- 功能選單 --}}
-                    <a class="nav-link" href="{{ route('users.show', Auth::user()->slug) }}">主頁</a>
+                    <a class="dropdown-item" href="{{ route('users.show', Auth::user()->slug) }}">主頁</a>
 
                     <div class="dropdown-divider"></div>
                     <form action="{{ route('logout') }}" method="POST">
@@ -143,5 +145,7 @@
     </main>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
+   @stack('scripts')
   </body>
 </html>
