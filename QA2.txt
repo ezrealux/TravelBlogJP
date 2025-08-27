@@ -44,6 +44,9 @@ $validated = $request->validate([
 
     15-1 這不是我要，我要可以自己設定所有錯誤的訊息，且可以做多國語系，在blade中使用，然後設定這網站目前是中文為主
     參考 https://laravel.com/docs/12.x/localization
+        Ans:
+        先透過php artisan lang:publish建立lang/
+        之後在lang/{language}目錄中放入訊息的dictionary 讓網站調用
 
 16. belongsTo 跟 belongsToMany 差異為何? 需解釋到資料表結構。
     public function category()
