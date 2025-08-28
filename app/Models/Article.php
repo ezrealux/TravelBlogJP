@@ -29,4 +29,9 @@ class Article extends Model
     {
         return $this->belongsToMany(Tag::class)->withTimestamps();
     }
+
+    public function favoriteLists()
+    {
+        return $this->belongsToMany(FavoriteList::class, 'favorite_list_article')->withTimestamps();
+    }
 }

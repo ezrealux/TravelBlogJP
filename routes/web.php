@@ -3,6 +3,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ArticleController;
+use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\HomeController;
 
@@ -25,15 +26,18 @@ DELETE	    /articles/{article}         articles.destroy	destroy()	刪除文章
 //參數傳入user或者slug
 Route::get('/users/{user:slug}', [UserController::class, 'show'])->name('users.show');
 
-Route::middleware('auth')->group(function () {
+// auth:必須已登入，verified:email必須已驗證
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::resource('articles', ArticleController::class)->except(['index', 'show']);
+    
     Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
+
+    Route::get('/favorites', [FavoriteController::class, 'index'])->name('favorites.index');
+    Route::post('/articles/{article}/favorite', [FavoriteController::class, 'store'])->name('favorites.store');
+    Route::delete('/articles/{article}/favorite', [FavoriteController::class, 'destroy'])->name('favorites.destroy');
 });
 
-// auth:必須已登入，verified:email必須已驗證
-Route::middleware(['auth', 'verified'])->group(function () {    
-    Route::resource('articles', ArticleController::class)->except(['index', 'show']);
-});
 Route::resource('articles', ArticleController::class)->only(['index', 'show']);
 Route::get('/articles', [ArticleController::class, 'index'])->name('articles.index');
 

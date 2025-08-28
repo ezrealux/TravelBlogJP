@@ -4,9 +4,6 @@
 <div class="container">
   <div class="d-flex justify-content-between align-items-center mb-3">
     <h1 class="h3">文章列表</h1>
-    @auth
-      <a href="{{ route('articles.create') }}" class="btn btn-primary">新增文章</a>
-    @endauth
   </div>
 
   <div class="row">
@@ -41,32 +38,28 @@
               <p class="text-muted">{{ Str::limit($article->body, 150) }}</p>
             </div>-->
 
-            {{-- @can('update', $article) 檢查目前的使用者是否能對這篇 $article 執行 update 權限。(常在policy中定義) --}}
-            @canany(['update', 'delete'], $article)
-              <div class="dropdown ms-auto">
-                <button class="btn btn-sm btn-outline-secondary" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                  <i class="bi bi-three-dots-vertical"></i>
-                </button>
+            @auth
+                @php
+                    $defaultList = Auth::user()->favoriteLists()->where('name', '我的收藏')->first();
+                @endphp
 
-                <ul class="dropdown-menu dropdown-menu-end">
-                  @can('update', $article)
-                    <li>
-                      <a class="dropdown-item" href="{{ route('articles.edit', $article) }}">編輯</a>
-                    </li>
-                  @endcan
-                  
-                  @can('delete', $article)
-                    <li>
-                      <form action="{{ route('articles.destroy', $article) }}" method="POST"
-                            onsubmit="return confirm('確定要刪除嗎？')">
-                        @csrf @method('DELETE')
-                        <button type="submit" class="dropdown-item text-danger">刪除</button>
-                      </form>
-                    </li>
-                  @endcan
-                </ul>
-              </div>
-            @endcanany
+                @if($defaultList && $defaultList->articles->contains($article->id))
+                    <form action="{{ route('favorites.destroy', $article) }}" method="POST" class="d-inline">
+                        @csrf
+                        @method('DELETE')
+                        <button class="btn btn-sm ">
+                            <i class="bi bi-bookmark-fill"></i>
+                        </button>
+                    </form>
+                @else
+                    <form action="{{ route('favorites.store', $article) }}" method="POST" class="d-inline">
+                        @csrf
+                        <button class="btn btn-sm ">
+                            <i class="bi bi-bookmark"></i>
+                        </button>
+                    </form>
+                @endif
+            @endauth 
           </div>
         </div>
       @empty

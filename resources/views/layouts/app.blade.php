@@ -77,7 +77,20 @@
           
           <ul class="navbar-nav ms-auto">
             @auth
-            <!--asset(...): Laravel 的 helper，會把路徑補上網站的 base URL，例如：
+              <li class="nav-item">
+                <a class="nav-link btn" href="{{ route('articles.create') }}">
+                  <i class="bi bi-pencil-square"></i>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href=""><i class="bi bi-bell-fill"></i></a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href=""><i class="bi bi-envelope-fill"></i></a>
+              </li>
+
+
+              <!--asset(...): Laravel 的 helper，會把路徑補上網站的 base URL，例如：
                 asset('images/default-avatar.png') -> https://yourdomain.com/images/default-avatar.png-->
               <li class="nav-item dropdown ">
               <!--dropdown: bootstrap觸發下拉功能-->

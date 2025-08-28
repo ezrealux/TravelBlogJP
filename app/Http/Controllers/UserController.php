@@ -10,8 +10,11 @@ class UserController extends Controller
 {
     public function show(User $user)
     {
-        $articles = $user->articles()->with('category','tags')->latest()->paginate(10);
-        return view('users.show', compact('user', 'articles'));
+        $articles = $user->articles()->latest()->paginate(10);
+        $favoriteLists = $user->favoriteLists()->with('articles')->get();
+        $bio = $user->bio;
+
+        return view('users.show', compact('user', 'articles', 'favoriteLists', 'bio'));
     }
 
     public function getRouteKeyName()

@@ -55,6 +55,11 @@ class User extends Authenticatable
         return $this->hasMany(\App\Models\Article::class);
     }
 
+    public function favoriteLists()
+    {
+        return $this->hasMany(FavoriteList::class);
+    }
+
     public function getRouteKeyName()
     {
         return 'slug';
