@@ -26,21 +26,32 @@ class ProfileController extends Controller
             'avatar' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
             'avatar_cropped' => 'nullable|string',
         ]);
-        //dd($validated);
 
-        // 如果有裁切後的圖片 (base64)
-        if (!empty($validated['avatar_cropped'])) {
-            $image = $validated['avatar_cropped'];
-            $image = str_replace('data:image/png;base64,', '', $image);
-            $image = str_replace(' ', '+', $image);
-            $imageName = 'avatars/' . uniqid() . '.png';
-            Storage::disk('public')->put($imageName, base64_decode($image));
-            $validated['avatar'] = 'storage/' . $imageName;
-        } elseif ($request->hasFile('avatar')) {
-            // 備用：使用原始上傳的檔案
-            $path = $request->file('avatar')->store('avatars', 'public');
-            $validated['avatar'] = 'storage/' . $path;
+        if ($request->filled('avatar_cropped')) {
+            $avatarData = $request->input('avatar_cropped');
+            
+            // 1. 檢查合法base64字串('data:image/png;base64,,iVBORw0KGgoAAAANSUhEUgAA...') 2. 擷取副檔名
+            if (preg_match('/^data:image\/(\w+);base64,/', $avatarData, $type)) {
+                // 只擷取逗號後的部分(iVBORw0KGgoAAAANSUhEUgAA...)
+                $avatarData = substr($avatarData, strpos($avatarData, ',') + 1);
+                $type = strtolower($type[1]); // png / jpg / jpeg
+                if (!in_array($type, ['jpg', 'jpeg', 'png'])) {
+                    $type = 'png'; // 預設 fallback
+                }
+
+                $avatarData = base64_decode($avatarData);
+                if ($avatarData === false) {
+                    throw new \Exception('base64 decode failed');
+                }
+
+                // 統一檔名：user_{id}.png
+                $fileName = "avatars/user_{$user->id}.{$type}";
+                Storage::disk('public')->put($fileName, $avatarData);
+
+                $validated['avatar'] = 'storage/' . $fileName;
+            }
         }
+        //dd($validated);
 
         //dd($validated->file('avatar'));
         $user->update($validated);
