@@ -6,8 +6,9 @@ composer require laravel/scout
 php artisan vendor:publish --provider="Laravel\Scout\ScoutServiceProvider"
 
 Search bar: Scout                   //done
-Avetar image chop: chopper.js
+Avetar image chop: cropper.js
 Text editor: TinyMCE CKEditor
+FavoriteList
 
 Search engine: melisearch/typesense     //postponed
 User self-defined tag                   //postponed
