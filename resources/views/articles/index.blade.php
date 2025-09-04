@@ -43,7 +43,7 @@
                     data-bs-target="#favoritesModal"
                     wire:click="$emit('openFavoritesModal')">
             </button>
-            @livewire('favorites-modal', ['article' => $article])
+            <livewire:favorites-modal :article="$article" />
 
           </div>
         </div>

@@ -1,58 +1,68 @@
 <?php
-
-namespace App\Http\Livewire;
+namespace App\Livewire;
 
 use Livewire\Component;
 use App\Models\Article;
-use App\Models\Collection;
+use App\Models\FavoriteList;
 use Illuminate\Support\Facades\Auth;
 
 class FavoritesModal extends Component
 {
     public $article;
-    public $collections = [];
+    public $favoriteLists = [];
     public $selected = [];
-    public $newCollectionName = '';
+    public string $newListName = '';
 
-    protected $listeners = ['openFavoritesModal' => 'loadCollections'];
+    protected $listeners = ['open-favorites-modal' => 'loadfavoriteLists'];
 
     public function mount(Article $article)
     {
         $this->article = $article;
     }
 
-    public function loadCollections()
+    public function loadfavoriteLists()
     {
         $user = Auth::user();
-        $this->collections = $user->collections()->get();
+        $this->favoriteLists = $user->favoriteLists()->with('articles')->get()
+            ->map(fn($c) => [
+                'id' => $c->id,
+                'name' => $c->name,
+                'selected' => $c->articles->contains($this->article->id)
+            ])
+            ->toArray();
 
         // 預先勾選已經收藏的
-        $this->selected = $this->collections
-            ->filter(fn($c) => $c->articles->contains($this->article->id))
+        $this->selected = collect($this->favoriteLists)
+            ->filter(fn($c) => $c['selected'])
             ->pluck('id')
             ->toArray();
     }
 
-    public function toggleCollection($collectionId)
+    public function toggleFavoriteList($listId)
     {
-        $collection = Collection::findOrFail($collectionId);
+        $favoriteList = FavoriteList::findOrFail($listId);
         if (in_array($collectionId, $this->selected)) {
-            $collection->articles()->syncWithoutDetaching([$this->article->id]);
+            // 移除
+            $favoriteList->articles()->detach($this->article->id);
+            $this->selected = array_diff($this->selected, [$listId]);
         } else {
-            $collection->articles()->detach($this->article->id);
+            // 加入
+            $favoriteList->articles()->attach($this->article->id);
+            $this->selected[] = $listId;
         }
     }
 
-    public function createCollection()
+    public function createFavoriteList()
     {
         $user = Auth::user();
-        if ($this->newCollectionName && !$user->collections()->where('name', $this->newCollectionName)->exists()) {
-            $collection = $user->collections()->create([
-                'name' => $this->newCollectionName,
+        if (!$this->newListName) return;
+        if (!$user->favoriteLists()->where('name', $this->newListName)->exists()) {
+            $collection = $user->favoriteLists()->create([
+                'name' => $this->newListName,
             ]);
             $collection->articles()->attach($this->article->id);
-            $this->newCollectionName = '';
-            $this->loadCollections();
+            $this->newListName = '';
+            $this->loadfavoriteLists();
         }
     }
 
