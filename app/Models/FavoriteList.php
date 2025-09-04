@@ -7,7 +7,7 @@ use App\Models\FavoriteListArticle;
 
 class FavoriteList extends Model
 {
-    protected $fillable = ['user_id', 'name', 'description'];
+    protected $fillable = ['user_id', 'name', 'is_default', 'description'];
 
     public function user()
     {

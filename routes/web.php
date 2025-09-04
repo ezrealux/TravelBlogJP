@@ -34,8 +34,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
 
     Route::get('/favorites', [FavoriteController::class, 'index'])->name('favorites.index');
-    Route::post('/articles/{article}/favorite', [FavoriteController::class, 'store'])->name('favorites.store');
-    Route::delete('/articles/{article}/favorite', [FavoriteController::class, 'destroy'])->name('favorites.destroy');
+
+    Route::resource('favorite-lists', FavoriteListController::class)->except(['show']);
+    // 文章與清單關聯
+    Route::post('favorite-lists/{article}/sync', [FavoriteListArticleController::class, 'sync'])->name('favorite-lists.articles.sync');
 });
 
 Route::resource('articles', ArticleController::class)->only(['index', 'show']);

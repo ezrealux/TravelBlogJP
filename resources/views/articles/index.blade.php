@@ -39,26 +39,7 @@
             </div>-->
 
             @auth
-                @php
-                    $defaultList = Auth::user()->favoriteLists()->where('name', '我的收藏')->first();
-                @endphp
-
-                @if($defaultList && $defaultList->articles->contains($article->id))
-                    <form action="{{ route('favorites.destroy', $article) }}" method="POST" class="d-inline">
-                        @csrf
-                        @method('DELETE')
-                        <button class="btn btn-sm ">
-                            <i class="bi bi-bookmark-fill"></i>
-                        </button>
-                    </form>
-                @else
-                    <form action="{{ route('favorites.store', $article) }}" method="POST" class="d-inline">
-                        @csrf
-                        <button class="btn btn-sm ">
-                            <i class="bi bi-bookmark"></i>
-                        </button>
-                    </form>
-                @endif
+                <x-favorite-modal :article="$article" />
             @endauth 
           </div>
         </div>
