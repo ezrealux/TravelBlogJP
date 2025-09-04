@@ -4,6 +4,8 @@ composer require laravel/fortify
 php artisan vendor:publish --provider="Laravel\\Fortify\\FortifyServiceProvider"
 composer require laravel/scout
 php artisan vendor:publish --provider="Laravel\Scout\ScoutServiceProvider"
+composer require livewire/livewire
+php artisan livewire:publish
 
 Search bar: Scout                   //done
 Avetar image chop: cropper.js

@@ -38,9 +38,13 @@
               <p class="text-muted">{{ Str::limit($article->body, 150) }}</p>
             </div>-->
 
-            @auth
-                <x-favorite-modal :article="$article" />
-            @endauth 
+            <button class="btn btn-primary"
+                    data-bs-toggle="modal"
+                    data-bs-target="#favoritesModal"
+                    wire:click="$emit('openFavoritesModal')">
+            </button>
+            @livewire('favorites-modal', ['article' => $article])
+
           </div>
         </div>
       @empty
