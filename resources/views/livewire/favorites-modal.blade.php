@@ -1,4 +1,7 @@
-<div wire:ignore.self class="modal fade" id="favoritesModal" tabindex="-1" aria-labelledby="favoritesModalLabel" aria-hidden="true">
+<div wire:ignore.self class="modal fade" 
+    id="favoritesModal" tabindex="-1" 
+    aria-labelledby="favoritesModalLabel" aria-hidden="true">
+    
     <div class="modal-dialog">
         <div class="modal-content p-3">
             <h5 class="modal-title" id="favoritesModalLabel">收藏到清單</h5>
@@ -12,6 +15,7 @@
             </form>
 
             <!-- 清單勾選 -->
+            <pre>{{ var_export($favoriteLists, true) }}</pre>
             <div class="list-group">
                 @foreach($favoriteLists as $col)
                     <label class="list-group-item">

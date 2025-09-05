@@ -3,11 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Models\Article;
+use App\Models\FavoriteList;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class FavoriteController extends Controller
 {
+    use AuthorizesRequests;
+
     public function store(Request $request)
     {
         $request->validate([
@@ -30,7 +34,7 @@ class FavoriteController extends Controller
         ]);
         $favoriteList->update(['name' => $request->name]);
 
-        return response()->json($favoriteList);
+        return redirect()->back()->with('success', '更新成功');
     }
 
     public function destroy(FavoriteList $favoriteList)
@@ -41,6 +45,6 @@ class FavoriteController extends Controller
         }
         $favoriteList->delete();
 
-        return response()->json(['status' => 'ok']);
+        return redirect()->back()->with('success', '刪除成功');
     }
 }

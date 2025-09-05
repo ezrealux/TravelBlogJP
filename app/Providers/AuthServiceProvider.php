@@ -25,5 +25,6 @@ class AuthServiceProvider extends ServiceProvider
     protected $policies = [
         // 使用auth()
         \App\Models\Article::class => \App\Policies\ArticlePolicy::class,
+        \App\Models\FavoriteList::class => \App\Policies\FavoriteListPolicy::class,
     ];
 }

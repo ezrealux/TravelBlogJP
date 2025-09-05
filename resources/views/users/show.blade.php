@@ -54,9 +54,17 @@
                                     </li>
                                 </ul>
                             </div>
+
+                            <button class="btn"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#favoritesModal"
+                                    wire:click="$emitTo('favorites-modal', 'openFavoritesModal', {{ $article->id }})">
+                                <i class="bi bi-bookmark"></i>
+                            </button>
                         </div>
                     </div>
                 @endforeach
+                <livewire:favorites-modal />
                 {{ $articles->links() }}
             @else
                 <p class="text-muted">尚未發表文章</p>
@@ -65,7 +73,7 @@
 
         <!-- Favorites Tab -->
         <div class="tab-pane fade" id="favorites" role="tabpanel">
-            {--@if($favoriteLists->count())--}
+            @if($favoriteLists->count())
                 @foreach($favoriteLists as $list)
                     <div class="card mb-3">
                         <div class="card-header d-flex justify-content-between align-items-center">
@@ -88,9 +96,9 @@
                         </div>
                     </div>
                 @endforeach
-            {--@else
+            @else
                 <p class="text-muted">尚未建立任何收藏清單</p>
-            @endif--}
+            @endif
         </div>
 
         <!-- Bio Tab -->

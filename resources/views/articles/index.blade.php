@@ -38,18 +38,19 @@
               <p class="text-muted">{{ Str::limit($article->body, 150) }}</p>
             </div>-->
 
-            <button class="btn btn-primary"
+            <button class="btn"
                     data-bs-toggle="modal"
                     data-bs-target="#favoritesModal"
-                    wire:click="$emit('openFavoritesModal')">
+                    wire:click="$emitTo('favorites-modal', 'openFavoritesModal', {{ $article->id }})">
+                <i class="bi bi-bookmark"></i>
             </button>
-            <livewire:favorites-modal :article="$article" />
 
           </div>
         </div>
       @empty
         <p>沒有符合條件的文章</p>
       @endforelse
+      <livewire:favorites-modal />
     </div>
 
     <div class="col-md-3">

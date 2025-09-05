@@ -13,16 +13,21 @@ class FavoritesModal extends Component
     public $selected = [];
     public string $newListName = '';
 
-    protected $listeners = ['open-favorites-modal' => 'loadfavoriteLists'];
+    protected $listeners = ['openFavoritesModal' => 'loadFavoriteLists'];
 
     public function mount(Article $article)
     {
         $this->article = $article;
     }
 
-    public function loadfavoriteLists()
-    {
+    public function loadFavoriteLists($articleId)
+    {    
+        dd(Auth::id(), Auth::user());
+        logger("⭐ loadFavoriteLists fired for articleId={$articleId}");
+
+        $this->article = Article::findOrFail($articleId);
         $user = Auth::user();
+
         $this->favoriteLists = $user->favoriteLists()->with('articles')->get()
             ->map(fn($c) => [
                 'id' => $c->id,
@@ -31,7 +36,6 @@ class FavoritesModal extends Component
             ])
             ->toArray();
 
-        // 預先勾選已經收藏的
         $this->selected = collect($this->favoriteLists)
             ->filter(fn($c) => $c['selected'])
             ->pluck('id')

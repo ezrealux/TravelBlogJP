@@ -33,11 +33,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
 
-    Route::get('/favorites', [FavoriteController::class, 'index'])->name('favorites.index');
-
-    Route::resource('favorite-lists', FavoriteListController::class)->except(['show']);
-    // 文章與清單關聯
-    Route::post('favorite-lists/{article}/sync', [FavoriteListArticleController::class, 'sync'])->name('favorite-lists.articles.sync');
+    Route::resource('favoriteLists', FavoriteController::class)->except(['show']);
+    Route::post('favoriteLists/{article}/sync', [FavoriteListArticleController::class, 'sync'])->name('favoriteLists.articles.sync');
 });
 
 Route::resource('articles', ArticleController::class)->only(['index', 'show']);

@@ -67,7 +67,7 @@ document.querySelectorAll('[id^="favoriteModal-"]').forEach(modalEl => {
         const form = modal.querySelector('form');
         const data = new FormData(form);
 
-        fetch(`/favorite-lists/${articleId}/sync`, {
+        fetch(`/favoriteLists/${articleId}/sync`, {
             method: "POST",
             headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
             body: data
@@ -80,7 +80,7 @@ document.getElementById('new-list-form').addEventListener('submit', function(e) 
     e.preventDefault();
     const data = new FormData(this);
 
-    fetch("{{ route('favorite-lists.store') }}", {
+    fetch("{{ route('favoriteLists.store') }}", {
         method: "POST",
         headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
         body: data
