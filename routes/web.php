@@ -31,8 +31,8 @@ Route::get('/users/{user:slug}', [UserController::class, 'show'])->name('users.s
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('articles', ArticleController::class)->except(['index', 'show']);
     
-    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::pUt('/profile', [ProfileController::class, 'update'])->name('profile.update');
 
     Route::resource('favoriteLists', FavoriteController::class)->except(['show']);
     Route::post('favoriteLists/{article}/sync', [FavoriteListArticleController::class, 'sync'])->name('favoriteLists.articles.sync');
