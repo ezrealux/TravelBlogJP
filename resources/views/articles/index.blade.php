@@ -41,8 +41,8 @@
             <button class="btn"
                     data-bs-toggle="modal"
                     data-bs-target="#favoritesModal"
-                    wire:click="$emitTo('favorites-modal', 'openFavoritesModal', {{ $article->id }})">
-                <i class="bi bi-bookmark"></i>
+                    wire:click="$dispatch('openFavoritesModal', {{ $article->id }})">
+              <i class="bi bi-bookmark"></i>
             </button>
 
           </div>
@@ -50,7 +50,7 @@
       @empty
         <p>沒有符合條件的文章</p>
       @endforelse
-      <livewire:favorites-modal />
+      <livewire:favorites-modal as="favorites-modal"/>
     </div>
 
     <div class="col-md-3">

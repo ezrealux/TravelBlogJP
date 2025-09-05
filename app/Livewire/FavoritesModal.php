@@ -13,18 +13,16 @@ class FavoritesModal extends Component
     public $selected = [];
     public string $newListName = '';
 
-    protected $listeners = ['openFavoritesModal' => 'loadFavoriteLists'];
+    protected $listeners = ['openFavoritesModal'];
 
-    public function mount(Article $article)
+    public function name(): string
     {
-        $this->article = $article;
+        return 'favorites-modal';
     }
 
     public function loadFavoriteLists($articleId)
     {    
-        dd(Auth::id(), Auth::user());
-        logger("⭐ loadFavoriteLists fired for articleId={$articleId}");
-
+        dd($articleId);
         $this->article = Article::findOrFail($articleId);
         $user = Auth::user();
 

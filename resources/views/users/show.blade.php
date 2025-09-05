@@ -4,8 +4,15 @@
 <div class="container">
     <div class="text-center mb-4">
         <img src="{{ asset($user->avatar) }}" class="rounded-circle" width="120" height="120" alt="avatar">
-        <h2 class="mt-2">{{ $user->name }}</h2>
+        <h2 class="mt-2">
+            {{ $user->name }}
+            
+        </h2>
+        <a class="nav-link" href="{{ route('profile.edit') }}">
+            <i class="bi bi-pencil-fill"></i>
+        </a>
         <p class="text-muted">{{ '@'.$user->slug }}</p>
+        <p class="text-muted">已發表 {{ $articles->total() }} 篇文章</p>
     </div>
 
     <!-- Nav Tabs -->
@@ -56,11 +63,12 @@
                             </div>
 
                             <button class="btn"
+                                    wire:click="$emitTo('favorites-modal', 'openFavoritesModal', {{ $article->id }})"
                                     data-bs-toggle="modal"
-                                    data-bs-target="#favoritesModal"
-                                    wire:click="$emitTo('favorites-modal', 'openFavoritesModal', {{ $article->id }})">
+                                    data-bs-target="#favoritesModal">
                                 <i class="bi bi-bookmark"></i>
                             </button>
+                            
                         </div>
                     </div>
                 @endforeach

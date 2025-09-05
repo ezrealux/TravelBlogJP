@@ -30,6 +30,7 @@ class CreateNewUser implements CreatesNewUsers
             ],
             'password' => $this->passwordRules(),
             'email_verified_at' => now(),
+            'captcha' => ['required', 'captcha'],
         ])->validate();
 
         $avatarPath = 'app/public/avatars/default-avatar.png';

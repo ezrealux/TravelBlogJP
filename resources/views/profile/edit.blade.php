@@ -32,6 +32,28 @@
             :preview="$user->avatar ?? 'storage/avatars/default-avatar.png'"
         />
 
+        @if (auth()->user()->two_factor_secret)
+            <form method="POST" action="{{ route('two-factor.disable') }}">
+                @csrf
+                @method('DELETE')
+                <button class="btn btn-danger">停用雙因子驗證</button>
+            </form>
+
+            <div class="mt-3">
+                <h6>恢復代碼 (請妥善保存)</h6>
+                <ul>
+                    @foreach (json_decode(decrypt(auth()->user()->two_factor_recovery_codes), true) as $code)
+                        <li>{{ $code }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @else
+            <form method="POST" action="{{ route('two-factor.enable') }}">
+                @csrf
+                <button class="btn btn-success">啟用雙因子驗證</button>
+            </form>
+        @endif
+
         <button type="submit" class="btn btn-primary">更新資料</button>
     </form>
 </div>

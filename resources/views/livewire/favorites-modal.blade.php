@@ -15,7 +15,7 @@
             </form>
 
             <!-- 清單勾選 -->
-            <pre>{{ var_export($favoriteLists, true) }}</pre>
+             <pre>{{ var_export($favoriteLists, true) }}</pre>
             <div class="list-group">
                 @foreach($favoriteLists as $col)
                     <label class="list-group-item">

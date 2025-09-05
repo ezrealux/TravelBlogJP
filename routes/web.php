@@ -4,6 +4,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\FavoriteController;
+use App\Http\Controllers\FavoriteListArticleController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\HomeController;
 
@@ -36,6 +37,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('favoriteLists', FavoriteController::class)->except(['show']);
     Route::post('favoriteLists/{article}/sync', [FavoriteListArticleController::class, 'sync'])->name('favoriteLists.articles.sync');
 });
+Route::get('captcha/{config?}', '\Mews\Captcha\CaptchaController@getCaptcha')->name('captcha');
 
 Route::resource('articles', ArticleController::class)->only(['index', 'show']);
 Route::get('/articles', [ArticleController::class, 'index'])->name('articles.index');
