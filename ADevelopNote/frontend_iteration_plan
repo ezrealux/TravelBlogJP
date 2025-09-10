@@ -1,0 +1,56 @@
+---
+# 🚀 Laravel 專案前端演進藍圖
+
+## 現階段（中小型專案，用 Livewire）
+渲染方式：Blade + Livewire component
+互動邏輯：Livewire 處理（收藏清單、彈窗、編輯個人檔案等）
+API 設計：先不用額外設計 REST/GraphQL API，直接 Livewire -> Controller
+
+優勢：開發快，維護成本低，符合 Laravel 工程師習慣。
+注意：保持資料流一致性（盡量集中資料存取邏輯，避免 Livewire 與 Controller 分散太亂）。
+---
+
+## 中期（專案擴展，部分前端模組 Vue/React 化）
+策略：
+  1. 繼續用 Livewire 作為主框架
+  2. 對於需要更強前端互動的區域（例如：即時搜尋、拖曳排序、圖片編輯器），引入 Vue/React Component
+  3. 使用 Laravel Inertia.js（或 Blade + Vite），讓 Vue/React component 直接嵌在 Blade 裡
+API 設計：開始為部分模組設計 JSON API（專門給 Vue/React component 使用）
+
+範例：
+* 收藏清單維持 Livewire
+* 即時搜尋（articles by category/tag/keyword） → Vue component
+* 裁剪頭像 → React component（因為 cropper.js 生態更適合 React）
+---
+
+## 長期（產品級，全面 Vue/React SPA）
+渲染方式：Laravel 只做 API 提供者 (REST / GraphQL)，前端 Vue/React 接管整個 UI
+狀態管理：Pinia (Vue) / Redux / Zustand (React)
+路由：Vue Router / React Router
+認證：Laravel Sanctum → 前端管理 session / token
+UI 框架：Tailwind / Bootstrap Vue / Material UI
+
+好處：
+* 高度互動、即時性功能（像 Notion、Medium）完全可以支撐
+* 前端團隊可獨立開發，不受 Laravel 限制
+代價：
+* 必須重寫大部分 UI（但 API 已存在 → 後端不用推翻重來）
+---
+
+# 平滑過渡的關鍵做法
+1. 早期就設計好 API Layer
+   * 即使暫時只給 Livewire 用，也要統一走 Service/Repository → 方便未來轉為 JSON API。
+2. 不要在 Blade 中塞太多 JS
+   * 避免混亂，以後 Vue/React 可以逐步取代。
+3. 模組化開發
+   * 收藏系統、用戶系統、文章系統盡量獨立 → 方便單一模組先 Vue 化。
+4. 混合架構過渡期
+   * Blade + Livewire 為主
+   * 個別互動模組 → Vue/React component
+   * 等互動模組比例越來越高，就可以切換成 Inertia.js 或前後端分離 SPA。
+---
+總結：
+短期（現在） → 用 Livewire，快速實現功能。
+中期（6-12 個月） → 引入 Vue/React component，混合開發。
+長期（產品化） → 前端全面 Vue/React SPA，Laravel 做 API。
+---
