@@ -2,9 +2,9 @@ make:cache-table          [cache:table] Create a migration for the cache databas
 make:cast                 Create a new custom Eloquent cast class
 make:channel              Create a new channel class
 make:class                Create a new class
-make:command              Create a new Artisan command
-make:component            Create a new view component class     "app/View/Components/FavoriteModal.php
-                                                                "resources/views/components/favorite-modal.blade.php"
+make:command              Create a new Artisan command          "app/Console/Commands"
+make:component            Create a new view component class     "app/View/Components/[modal name].php
+                                                                "resources/views/components/[blade name].blade.php"
 make:controller           Create a new controller class         "app/Http/Controllers"
 make:enum                 Create a new enum
 make:event                Create a new event class

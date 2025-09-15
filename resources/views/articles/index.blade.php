@@ -7,10 +7,11 @@
   </div>
 
   <div class="row">
-    @include('partials.article-card', [
-      'articles' => $articles,
-    ])
-    <livewire:favorites-modal as="favorites-modal"/>
+    <div class="col-md-9">
+      @include('partials.article-card', [
+        'articles' => $articles,
+      ])
+    </div>
 
     <div class="col-md-3">
       @include('partials.sidebar', [
@@ -21,6 +22,7 @@
       ])
     </div>
   </div>
+  <livewire:favorites-modal as="favorites-modal"/>
 </div>
 
 {{ $articles->links() }}
