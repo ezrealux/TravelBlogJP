@@ -16,3 +16,27 @@ SPA (Vue component):
 | ------------- | ------------------------- | ------------------------------------------------- |
 | MeiliSearch   | simple, fast, real time   | fewer                                             |
 | Typesense     | fewer                     | complex search, filter, sort, priority control    |
+
+ProjectJP/
+├── app/
+│   ├── Http/
+│   │   ├── Controllers/
+│   │   │   ├── Web/      # Blade 專用控制器
+│   │   │   └── Api/      # 提供 Vue SPA 用 API
+│   ├── Models/
+├── resources/
+│   ├── views/            # Blade 模板 (文章、搜尋、地區介紹...)
+│   │   ├── layouts/
+│   │   ├── articles/
+│   │   ├── categories/
+│   │   └── welcome.blade.php
+│   └── js/
+│       ├── app.js        # Vue 入口
+│       ├── components/
+│       ├── pages/        # Vue Router 頁面 (SPA)
+│       ├── stores/       # Pinia 狀態管理
+│       └── utils/
+├── routes/
+│   ├── web.php           # Blade 網頁
+│   ├── api.php           # Vue SPA API
+│   └── spa.php           # 專門給 Vue Router fallback

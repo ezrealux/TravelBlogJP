@@ -7,16 +7,16 @@ use App\Models\Article;
 use App\Models\Category;
 use App\Models\Tag;
 use App\Models\User;
-use Illuminate\Support\Str;
 
-class DatabaseSeeder extends Seeder
+class ArticleSeeder extends Seeder
 {
     /**
-     * Seed the application's database.
+     * Run the database seeds.
      */
     public function run(): void
     {
-        // 確保有分類與標籤
+        /*
+        // 確保有資料可用
         if (Category::count() === 0) {
             Category::factory(5)->create();
         }
@@ -25,18 +25,27 @@ class DatabaseSeeder extends Seeder
             Tag::factory(10)->create();
         }
 
+        if (User::count() === 0) {
+            $this->call(UserSeeder::class); // 沒有 user 就先跑 UserSeeder
+        }*/
+
         $categories = Category::all();
         $tags = Tag::all();
+        $users = User::all();
 
         // 建立 20 篇文章
-        Article::factory(20)->create()->each(function ($article) use ($categories, $tags) {
-            // 隨機分類
+        Article::factory(20)->create()->each(function ($article) use ($categories, $tags, $users) {
+            // 指派作者
+            $article->user_id = $users->random()->id;
+
+            // 指派分類
             $article->category_id = $categories->random()->id;
             $article->save();
 
-            // 隨機 2-5 個標籤
+            // 指派標籤
             $randomTags = $tags->random(rand(2, 5))->pluck('id')->toArray();
             $article->tags()->sync($randomTags);
         });
     }
 }
+
