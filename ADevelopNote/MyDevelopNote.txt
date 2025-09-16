@@ -35,8 +35,3 @@ make:session-table        [session:table] Create a migration for the session dat
 make:test                 Create a new test class
 make:trait                Create a new trait
 make:view [dir.name]      Create a new view                     "resource/views/[dir]/[name]"
-
--
-
-make:livewire               app/Http/Livewire/FavoritesModal.php" "resources/views/livewire/favorites-modal.blade.php"
-

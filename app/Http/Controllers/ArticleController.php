@@ -28,19 +28,19 @@ class ArticleController extends Controller
         // $this->middleware('auth');
     }
 
+    /**
+     * @OA\Get(
+     *     path="/api/articles",
+     *     summary="取得所有文章",
+     *     tags={"Articles"},
+     *     @OA\Response(
+     *         response=200,
+     *         description="成功取得文章列表"
+     *     )
+     * )
+     */
     public function index(): View
     {
-        /**
-         * @OA\Get(
-         *     path="/api/articles",
-         *     summary="取得所有文章",
-         *     tags={"Articles"},
-         *     @OA\Response(
-         *         response=200,
-         *         description="成功取得文章列表"
-         *     )
-         * )
-         */
         // 查詢文章的tag與user,依id排列, 一個page10筆
         $articles = Article::with(['tags','user'])
             ->latest('updated_at')
@@ -61,29 +61,29 @@ class ArticleController extends Controller
         return view('articles.create', compact('categories', 'tags'));
     }
 
+    /**
+     * @OA\Post(
+     *     path="/api/articles",
+     *     summary="建立新文章",
+     *     tags={"Articles"},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"title", "body"},
+     *             @OA\Property(property="title", type="string", example="旅日遊記"),
+     *             @OA\Property(property="body", type="string", example="內容詳述..."),
+     *             @OA\Property(property="category_id", type="integer", example=1),
+     *             @OA\Property(property="tags", type="array", @OA\Items(type="integer"))
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=201,
+     *         description="成功建立文章"
+     *     )
+     * )
+     */
     public function store(ArticleRequest $request): RedirectResponse
     {
-        /**
-         * @OA\Post(
-         *     path="/api/articles",
-         *     summary="建立新文章",
-         *     tags={"Articles"},
-         *     @OA\RequestBody(
-         *         required=true,
-         *         @OA\JsonContent(
-         *             required={"title", "body"},
-         *             @OA\Property(property="title", type="string", example="旅日遊記"),
-         *             @OA\Property(property="body", type="string", example="內容詳述..."),
-         *             @OA\Property(property="category_id", type="integer", example=1),
-         *             @OA\Property(property="tags", type="array", @OA\Items(type="integer"))
-         *         )
-         *     ),
-         *     @OA\Response(
-         *         response=201,
-         *         description="成功建立文章"
-         *     )
-         * )
-         */
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'body' => 'required|string',
@@ -110,29 +110,29 @@ class ArticleController extends Controller
         return redirect()->route('articles.index')->with('success', '文章已建立');
     }
 
+    /**
+     * @OA\Get(
+     *     path="/api/articles/{id}",
+     *     summary="取得指定文章",
+     *     tags={"Articles"},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="成功取得文章"
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="找不到文章"
+     *     )
+     * )
+     */
     public function show(Article $article): View
     {
-        /**
-         * @OA\Get(
-         *     path="/api/articles/{id}",
-         *     summary="取得指定文章",
-         *     tags={"Articles"},
-         *     @OA\Parameter(
-         *         name="id",
-         *         in="path",
-         *         required=true,
-         *         @OA\Schema(type="integer")
-         *     ),
-         *     @OA\Response(
-         *         response=200,
-         *         description="成功取得文章"
-         *     ),
-         *     @OA\Response(
-         *         response=404,
-         *         description="找不到文章"
-         *     )
-         * )
-         */
         $article->load(['tags','user']); // Eloquent 的「延遲載入（Eager Loading）」方法。預先載入文章的 tags 與 user 關聯
         return view('articles.show', compact('article'));
     }
@@ -146,35 +146,35 @@ class ArticleController extends Controller
         return view('articles.edit', compact('article','categories','tags','selected'));
     }
 
+    /**
+     * @OA\Put(
+     *     path="/api/articles/{id}",
+     *     summary="更新指定文章",
+     *     tags={"Articles"},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"title", "body"},
+     *             @OA\Property(property="title", type="string", example="更新後的標題"),
+     *             @OA\Property(property="body", type="string", example="更新後的內容"),
+     *             @OA\Property(property="category_id", type="integer", example=1),
+     *             @OA\Property(property="tags", type="array", @OA\Items(type="integer"))
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="成功更新文章"
+     *     )
+     * )
+     */
     public function update(ArticleRequest $request, Article $article): RedirectResponse
     {
-        /**
-         * @OA\Put(
-         *     path="/api/articles/{id}",
-         *     summary="更新指定文章",
-         *     tags={"Articles"},
-         *     @OA\Parameter(
-         *         name="id",
-         *         in="path",
-         *         required=true,
-         *         @OA\Schema(type="integer")
-         *     ),
-         *     @OA\RequestBody(
-         *         required=true,
-         *         @OA\JsonContent(
-         *             required={"title", "body"},
-         *             @OA\Property(property="title", type="string", example="更新後的標題"),
-         *             @OA\Property(property="body", type="string", example="更新後的內容"),
-         *             @OA\Property(property="category_id", type="integer", example=1),
-         *             @OA\Property(property="tags", type="array", @OA\Items(type="integer"))
-         *         )
-         *     ),
-         *     @OA\Response(
-         *         response=200,
-         *         description="成功更新文章"
-         *     )
-         * )
-         */
         $this->authorize('update', $article);
         $validated = $request->validate([
             'title' => 'required|string|max:255',
@@ -195,25 +195,25 @@ class ArticleController extends Controller
         return redirect()->route('articles.show', $article)->with('success', '文章已更新');
     }
 
+    /**
+     * @OA\Delete(
+     *     path="/api/articles/{id}",
+     *     summary="刪除文章",
+     *     tags={"Articles"},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(
+     *         response=204,
+     *         description="成功刪除"
+     *     )
+     * )
+     */
     public function destroy(Article $article): RedirectResponse
     {
-        /**
-         * @OA\Delete(
-         *     path="/api/articles/{id}",
-         *     summary="刪除文章",
-         *     tags={"Articles"},
-         *     @OA\Parameter(
-         *         name="id",
-         *         in="path",
-         *         required=true,
-         *         @OA\Schema(type="integer")
-         *     ),
-         *     @OA\Response(
-         *         response=204,
-         *         description="成功刪除"
-         *     )
-         * )
-         */
         $this->authorize('delete', $article);
         $article->delete();
         return redirect()->route('articles.index')->with('success', '文章已刪除');

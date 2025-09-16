@@ -1,2 +1,18 @@
-部落格或 CMS，用 Blade + Component + 一點 Vue 就很夠用。
-Medium、Notion 這種互動平台，那就直接走 SPA + Laravel API。
+MPA (Blade):
+    content.index/show/category/search/
+    SEO complete
+    for sharing link (Google / Facebook)
+    static HTML, fast loading
+SPA (Vue component):
+    user interaction
+    comment list / bookmark / Like button (no need to refresh the webpage)
+    scheduling / notify / map interaction
+    backend article editor
+
+    Vue App 掛在 app.blade.php 裡
+    使用者登入後才載入 SPA 互動功能
+
+| search engine | frontend                  | backend                                           |
+| ------------- | ------------------------- | ------------------------------------------------- |
+| MeiliSearch   | simple, fast, real time   | fewer                                             |
+| Typesense     | fewer                     | complex search, filter, sort, priority control    |
