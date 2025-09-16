@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Laravel\Fortify\Contracts\CreatesNewUsers;
 
+use Illuminate\Auth\Events\Registered;
+
 class CreateNewUser implements CreatesNewUsers
 {
     use PasswordValidationRules;
@@ -30,7 +32,6 @@ class CreateNewUser implements CreatesNewUsers
             ],
             'password' => $this->passwordRules(),
             'email_verified_at' => now(),
-            'captcha' => ['required', 'captcha'],
         ])->validate();
 
         $avatarPath = 'app/public/avatars/default-avatar.png';
@@ -42,12 +43,15 @@ class CreateNewUser implements CreatesNewUsers
             $avatarPath = 'storage/'.$path;
         }
 
-        return User::create([
+        $user = User::create([
             'name' => $input['name'],
             'email' => $input['email'],
             'password' => Hash::make($input['password']),
-            'email_verified_at' => now(), // 註冊時自動驗證
             'avatar' => $avatarPath, // 給一個預設頭像
         ]);
+
+        event(new Registered($user));
+
+        return $user;
     }
 }

@@ -8,9 +8,10 @@ use App\Http\Controllers\FavoriteListArticleController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\SearchController;
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
+use Illuminate\Http\Request;
 
 Route::get('/', fn () => redirect()->route('articles.index'));
-Route::get('/home', [HomeController::class, 'index'])->name('home');
 
 Route::get('/search', [SearchController::class, 'index'])->name('search.index');
 
@@ -32,6 +33,8 @@ Route::get('/users/{user:slug}', [UserController::class, 'show'])->name('users.s
 
 // auth:必須已登入，verified:email必須已驗證
 Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('/home', [HomeController::class, 'index'])->name('home');
+    
     Route::resource('articles', ArticleController::class)->except(['index', 'show']);
     
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -40,7 +43,23 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('favoriteLists', FavoriteController::class)->except(['show']);
     Route::post('favoriteLists/{article}/sync', [FavoriteListArticleController::class, 'sync'])->name('favoriteLists.articles.sync');
 });
-Route::get('captcha/{config?}', '\Mews\Captcha\CaptchaController@getCaptcha')->name('captcha');
+
+// 驗證 email 的路由
+Route::get('/email/verify', function () {
+    return view('auth.verify-email');
+})->middleware('auth')->name('verification.notice');
+
+Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
+    $request->fulfill(); // 標記為已驗證
+    return redirect('/home'); // 驗證完成後導向
+})->middleware(['auth', 'signed'])->name('verification.verify');
+
+// 重新寄送驗證信
+Route::post('/email/verification-notification', function (Request $request) {
+    $request->user()->sendEmailVerificationNotification();
+    return back()->with('status', 'verification-link-sent');
+})->middleware(['auth', 'throttle:6,1'])->name('verification.send');
+
 
 Route::resource('articles', ArticleController::class)->only(['index', 'show']);
 Route::get('/articles', [ArticleController::class, 'index'])->name('articles.index');

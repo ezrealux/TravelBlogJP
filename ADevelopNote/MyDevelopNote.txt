@@ -13,8 +13,8 @@ make:factory              Create a new model factory            "database/factor
 make:interface            Create a new interface
 make:job                  Create a new job class
 make:job-middleware       Create a new job middleware class
-make:listener             Create a new event listener class
-make:mail                 Create a new email class
+make:listener             Create a new event listener class     "app\Listeners"
+make:mail                 Create a new email class              "app\Mail"
 make:middleware           Create a new HTTP middleware class
 make:migration            Create a new migration file           "database/migration"
 make:model                Create a new Eloquent model class     "app/Models"

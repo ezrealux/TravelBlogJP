@@ -35,10 +35,6 @@
                 <input type="password" name="password_confirmation" class="form-control" required>
             </div>
             <div class="mb-3">
-                <input type="text" name="captcha" class="form-control" placeholder="輸入驗證碼">
-                <img src="{{ captcha_src() }}" alt="captcha" onclick="this.src='{{ captcha_src() }}' + Math.random()">
-            </div>
-            <div class="mb-3">
                 <label class="form-label">頭像</label>
                 <input type="file" name="avatar" class="form-control" enctype="multipart/form-data">
             </div>
