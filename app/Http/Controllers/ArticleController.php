@@ -10,6 +10,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use OpenApi\Annotations as OA;
+use Illuminate\Http\Request;
 
 /**
  * @OA\Tag(
@@ -82,7 +83,7 @@ class ArticleController extends Controller
      *     )
      * )
      */
-    public function store(ArticleRequest $request): RedirectResponse
+    public function store(Request $request): RedirectResponse
     {
         $validated = $request->validate([
             'title' => 'required|string|max:255',
@@ -94,12 +95,13 @@ class ArticleController extends Controller
         
         // 呼叫App\Models\User model裡的articles()，回傳一個 HasMany 關聯物件。
         // create([...]): 利用這個關聯物件在資料庫建立一筆文章，同時自動在 articles 表裡把 user_id 欄位設成該使用者的 id。
-        $article = $request->user()->articles()->create([
+        $articleData = [
             'title' => $request->input('title'),
             'body' => $request->input('body'),
             'category_id' => $validated['category_id'] ?? null,
             'updated_at' => now()
-        ]);
+        ];
+        $article = $request->user()->articles()->create($articleData);
         // 根據request中的input tag(否則是空陣列)
         // sync() 會根據你提供的標籤 ID 陣列，更新 pivot table 中該文章與標籤的關聯
         //$article->tags()->sync($request->input('tags', []));
@@ -173,9 +175,10 @@ class ArticleController extends Controller
      *     )
      * )
      */
-    public function update(ArticleRequest $request, Article $article): RedirectResponse
+    public function update(Request $request, Article $article): RedirectResponse
     {
         $this->authorize('update', $article);
+
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'body' => 'required|string',
@@ -184,13 +187,17 @@ class ArticleController extends Controller
             'tags.*' => 'exists:tags,id',
         ]);
 
-        $article->update([
+        $articleData = [
             'title' => $validated['title'],
             'body' => $validated['body'],
             'category_id' => $validated['category_id'] ?? null,
-            'updated_at' => now()
-        ]);
-        $article->tags()->sync($request->input('tags', []));
+            'updated_at' => now(),
+        ];
+        $article->update($articleData);
+
+        if (!empty($validated['tags'])) {
+            $article->tags()->sync($validated['tags']);
+        }
 
         return redirect()->route('articles.show', $article)->with('success', '文章已更新');
     }
@@ -263,4 +270,23 @@ class ArticleController extends Controller
             'selectedTag' => $tag
         ]);
     }
+
+    public function bySearch(Request $request)
+    {
+        $query = $request->input('query');
+        if (!$query) {
+            return view('articles.index', [
+                'articles' => collect(),
+                'pageTitle' => 'Search result for：' . $query,
+            ]);
+        }
+
+        // 使用 Scout 搜尋
+        $articles = Article::search($query)->paginate(10);
+
+        return view('articles.index', [
+            'articles' => $articles,
+            'pageTitle' => 'Search result for：' . $query,
+        ]);
     }
+}

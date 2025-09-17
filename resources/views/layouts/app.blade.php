@@ -77,7 +77,7 @@
             </ul>
             
             <ul>
-              <form class="d-flex ms-auto" action="{{ route('search.index') }}" method="GET">
+              <form class="d-flex ms-auto" action="{{ route('articles.bySearch') }}" method="GET">
                 <input
                   class="form-control me-2"
                   type="search"

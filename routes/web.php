@@ -7,13 +7,10 @@ use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\FavoriteListArticleController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\SearchController;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
 
 Route::get('/', fn () => redirect()->route('articles.index'));
-
-Route::get('/search', [SearchController::class, 'index'])->name('search.index');
 
 // Route resource會註冊7個RestFul常見route
 /*
@@ -62,13 +59,11 @@ Route::post('/email/verification-notification', function (Request $request) {
 
 
 Route::resource('articles', ArticleController::class)->only(['index', 'show']);
-Route::get('/articles', [ArticleController::class, 'index'])->name('articles.index');
 
 Route::get('/categories', [CategoryController::class, 'index'])->name('categories.index');
 //Route::get('/categories/{category}', [CategoryController::class, 'show'])->name('categories.show');
 Route::get('/categories/{category}', [ArticleController::class, 'byCategory'])->name('articles.byCategory');
-
 Route::get('/tags/{tag}', [ArticleController::class, 'byTag'])->name('articles.byTag');
 //Route::get('/tags/{tag}', [CategoryController::class, 'show'])->name('tags.show');
-
+Route::get('/search', [ArticleController::class, 'bySearch'])->name('articles.bySearch');
 //Route::get('/search', [SearchController::class, 'index'])->name('search');
