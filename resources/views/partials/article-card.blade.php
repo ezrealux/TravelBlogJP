@@ -29,7 +29,7 @@
         <p class="text-muted">{{ Str::limit($article->body, 150) }}</p>
     </div>-->
 
-    <button class="btn"
+    <button class="btn ms-auto"
             data-bs-toggle="modal"
             data-bs-target="#favoritesModal"
             wire:click="$dispatch('openFavoritesModal', {{ $article->id }})">

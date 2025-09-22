@@ -9,6 +9,9 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Str;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 
+use App\Notifications\QueuedVerifyEmail;
+use App\Notifications\QueuedResetPassword;
+
 class User extends Authenticatable implements MustVerifyEmail
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
@@ -79,5 +82,14 @@ class User extends Authenticatable implements MustVerifyEmail
                 $user->slug = Str::slug($user->name) . '-' . uniqid();
             }
         });
+    }
+
+    public function sendEmailVerificationNotification()
+    {
+        $this->notify(new QueuedVerifyEmail);
+    }
+    public function sendPasswordResetNotification($token)
+    {
+        $this->notify(new QueuedResetPassword($token));
     }
 }

@@ -18,6 +18,7 @@ php artisan sail:install
     MariaDB
     Redis
     Meilisearch
+    Typesense
     Mailpit
     Selenium
 ./vendor/bin/sail up
@@ -30,40 +31,34 @@ Sail 取代傳統的 php, composer, npm 指令，寫法如下：
 為了簡化，你可以在 .bashrc / .zshrc 加 alias：
     alias sail='[ -f sail ] && bash sail || bash vendor/bin/sail'
 
+./vendor/bin/sail composer require laravel/telescope
+
 // cropperjs/CKEditor
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
 <script src="https://cdn.ckeditor.com/ckeditor5/39.0.1/classic/ckeditor.js"></script>
 //<script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
 
-npm install meilisearch
-
 // Authentication:
-composer require laravel/fortify
-php artisan vendor:publish --provider="Laravel\\Fortify\\FortifyServiceProvider"
+./vendor/bin/sail composer require laravel/fortify
+./vendor/bin/sail artisan vendor:publish --provider="Laravel\\Fortify\\FortifyServiceProvider"
 
 // Search bar:
-composer require laravel/scout
-php artisan vendor:publish --provider="Laravel\Scout\ScoutServiceProvider"
-/typesense
+./vendor/bin/sail composer require laravel/scout
+./vendor/bin/sail artisan vendor:publish --provider="Laravel\Scout\ScoutServiceProvider"
 
 // (composer require mewebstudio/purifier)
 
 // swagger UI
-composer require "darkaonline/l5-swagger"
-php artisan vendor:publish --provider "L5Swagger\L5SwaggerServiceProvider"
+./vendor/bin/sail composer require "darkaonline/l5-swagger"
+./vendor/bin/sail artisan vendor:publish --provider "L5Swagger\L5SwaggerServiceProvider"
 
-2FA captcha
-
-MVC RestfulAPI SPA
-composer require mews/captcha
+2FA
 
 FavoriteList
 
 User self-defined tag                   //postponed
 Interactive map: Leaflet, GeoJSON       //postponed
-
-category page
 
 php artisan migrate:refresh         | migrate:rollback + migrate
 php artisan migrate:refresh --seed  | migrate:rollback + migrate + db:seed (倒回migration 重建資料庫)

@@ -15,7 +15,7 @@ class HomeController extends Controller
         $articles = Article::with('user','category','tags')->latest()->paginate(10);
         return view('home.index', compact('articles'));
     }
-
+    
     public function show(User $user)
     {
         $articles = $user->articles()->with('category','tags')->latest()->paginate(10);

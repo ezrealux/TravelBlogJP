@@ -12,6 +12,7 @@ return new class extends Migration {
             $table->timestamps();
 
             $table->unique(['favorite_list_id', 'article_id']);
+            
         });
     }
 

@@ -4,6 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+
 return new class extends Migration
 {
     /**
@@ -14,11 +15,25 @@ return new class extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->text('bio')->nullable()->after('slug');
             $table->string('email')->unique();
+            $table->string('avatar')->nullable()->after('email');
+            $table->boolean('is_admin')->default(false);
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();
+            $table->string('slug')->unique()->after('name');
+            $table->timestamp('last_login_at')->nullable()->after('remember_token');
             $table->timestamps();
+            $table->text('two_factor_secret')
+                  ->after('password')
+                  ->nullable();
+            $table->text('two_factor_recovery_codes')
+                  ->after('two_factor_secret')
+                  ->nullable();
+            $table->timestamp('two_factor_confirmed_at')
+                  ->after('two_factor_recovery_codes')
+                  ->nullable();
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {
